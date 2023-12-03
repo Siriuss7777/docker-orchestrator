@@ -11,14 +11,14 @@ source ~/.bashrc
 ~~~
 
 ## Default infrasctructure
-/opt/
-     docker/
-            available/ 
-		      service1/docker-compose.yml
-		      service2/docker-compose.yml
-		      [...]
-	    enabled/
-		    [automatically generated and managed]
+├── /opt
+│   ├── docker
+│   │   ├── available/ 
+│   │   │   ├── service1/docker-compose.yml
+│   │   │   ├── service2/docker-compose.yml
+│   │   │   ├── [...]
+│   │   ├── enabled/
+│   │   │   ├── [automatically generated and managed]
 
 ## Future improvements
 * Do not link the whole folder to enable it (rather create/delete a file to manage enabled containers...)
