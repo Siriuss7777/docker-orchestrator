@@ -11,6 +11,7 @@ source ~/.bashrc
 ~~~
 
 ## Default infrasctructure
+```
 ├── /opt
 │   ├── docker
 │   │   ├── available/ 
@@ -19,6 +20,7 @@ source ~/.bashrc
 │   │   │   ├── [...]
 │   │   ├── enabled/
 │   │   │   ├── [automatically generated and managed]
+```
 
 ## Future improvements
 * Do not link the whole folder to enable it (rather create/delete a file to manage enabled containers...)
