@@ -12,8 +12,8 @@ source ~/.bashrc
 
 ## Default infrasctructure
 ```
-├── /opt
-│   ├── docker
+├── /opt/
+│   ├── docker/
 │   │   ├── available/ 
 │   │   │   ├── service1/docker-compose.yml
 │   │   │   ├── service2/docker-compose.yml
