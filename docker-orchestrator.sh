@@ -40,6 +40,22 @@ disable_container() {
     fi
 }
 
+update_container() {
+    container_name=$1
+    if [ -z "$container_name" ]; then
+        echo "Veuillez spécifier le nom du conteneur à mettre à jour."
+        return
+    fi
+
+    if [ -L "$DOCKER_ENABLED_DIR/$container_name" ]; then
+        cd "$DOCKER_ENABLED_DIR/$container_name" && docker-compose pull
+        recreate_container "$container_name"
+        echo "Le conteneur $container_name a été mis à jour avec succès."
+    else
+        echo "Le conteneur $container_name n'est pas actif."
+    fi
+}
+
 start_container() {
     container_name=$1
     if [ -z "$container_name" ]; then
@@ -201,7 +217,7 @@ _autocomplete_networks() {
 # Configuration de l'autocomplétion en fonction de la commande
 _autocomplete() {
     case "${COMP_WORDS[1]}" in
-        enable | disable | start | stop | logs)
+        enable | disable | start | stop | logs | edit | restart | recreate | update)
             _autocomplete_containers
             ;;
         list)
@@ -215,12 +231,6 @@ _autocomplete() {
             if [ "${#COMP_WORDS[@]}" -eq 2 ]; then
                 _autocomplete_networks
             fi
-            ;;
-        edit)
-            _autocomplete_containers
-            ;;
-        restart | recreate)
-            _autocomplete_containers
             ;;
         *)
             _autocomplete_service_commands
@@ -263,7 +273,10 @@ case "$1" in
     recreate)
         recreate_container "$2"
         ;;
+    update)
+        update_container "$2"
+        ;;
     *)
-        echo "Utilisation : docker-orchestrator {enable|disable|start|stop|logs|list|network|edit|restart|recreate} <nom_du_conteneur>"
+        echo "Utilisation : docker-orchestrator {enable|disable|start|stop|logs|list|network|edit|restart|recreate|update} <nom_du_conteneur>"
         ;;
 esac

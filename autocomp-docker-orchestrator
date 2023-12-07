@@ -6,11 +6,11 @@ _docker_orchestrator() {
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
-    commands="enable disable start stop logs list network edit restart recreate"
+    commands="enable disable start stop logs list network edit restart recreate update"
 
     if [[ ${cur} == * ]]; then
         case "${prev}" in
-            enable | disable | start | stop | logs | restart | recreate)
+            enable | disable | start | stop | logs | restart | recreate | update)
                 local containers
                 containers=$(ls /opt/docker/available)
                 COMPREPLY=( $(compgen -W "${containers}" -- ${cur}) )
