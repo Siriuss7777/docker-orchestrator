@@ -48,7 +48,7 @@ update_container() {
     fi
 
     if [ -L "$DOCKER_ENABLED_DIR/$container_name" ]; then
-        cd "$DOCKER_ENABLED_DIR/$container_name" && docker-compose pull
+        cd "$DOCKER_ENABLED_DIR/$container_name" && docker compose pull
         recreate_container "$container_name"
         echo "Le conteneur $container_name a été mis à jour avec succès."
     else
@@ -64,7 +64,7 @@ start_container() {
     fi
 
     if [ -L "$DOCKER_ENABLED_DIR/$container_name" ]; then
-        cd "$DOCKER_ENABLED_DIR/$container_name" && docker-compose up -d
+        cd "$DOCKER_ENABLED_DIR/$container_name" && docker compose up -d
         echo "Le conteneur $container_name a été démarré."
     else
         echo "Le conteneur $container_name n'est pas actif."
@@ -79,7 +79,7 @@ stop_container() {
     fi
 
     if [ -L "$DOCKER_ENABLED_DIR/$container_name" ]; then
-        cd "$DOCKER_ENABLED_DIR/$container_name" && docker-compose down
+        cd "$DOCKER_ENABLED_DIR/$container_name" && docker compose down
         echo "Le conteneur $container_name a été arrêté."
     else
         echo "Le conteneur $container_name n'est pas actif."
@@ -94,7 +94,7 @@ restart_container() {
     fi
 
     if [ -L "$DOCKER_ENABLED_DIR/$container_name" ]; then
-        cd "$DOCKER_ENABLED_DIR/$container_name" && docker-compose restart
+        cd "$DOCKER_ENABLED_DIR/$container_name" && docker compose restart
         echo "Le conteneur $container_name a été redémarré."
     else
         echo "Le conteneur $container_name n'est pas actif."
@@ -120,9 +120,9 @@ show_logs() {
     if [ -L "$DOCKER_ENABLED_DIR/$container_name" ]; then
         cd "$DOCKER_ENABLED_DIR/$container_name" || exit 1
         if [ "$follow" = true ]; then
-            docker-compose logs -f
+            docker compose logs -f
         else
-            docker-compose logs
+            docker compose logs
         fi
         cd - > /dev/null || exit 1
     else
@@ -151,16 +151,16 @@ network_table() {
         return
     fi
 
-    printf "%-30s%-20s%-20s\n" "Nom du Conteneur" "Adresse IP" "Ports Ouverts"
-    printf "%-30s%-20s%-20s\n" "================" "============" "============"
+    printf "%-30s%-30s%-20s\n" "Nom du Conteneur" "Adresse IP" "Ports Ouverts"
+    printf "%-30s%-30s%-20s\n" "================" "============" "============"
 
     container_ids=$(docker network inspect --format='{{range $id, $container := .Containers}}{{$id}} {{end}}' "$network_name")
     for container_id in $container_ids; do
         container_name=$(docker ps --filter "id=$container_id" --format '{{.Names}}')
-        ip_address=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$container_id")
+        ip_address=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{printf "%s " .IPAddress}}{{end}}' "$container_id")
         open_ports=$(docker port "$container_id" | awk '{print $3}' | paste -sd "," -)
 
-        printf "%-30s%-20s%-20s\n" "$container_name" "$ip_address" "$open_ports"
+        printf "%-30s%-30s%-20s\n" "$container_name" "$ip_address" "$open_ports"
     done
 }
 
