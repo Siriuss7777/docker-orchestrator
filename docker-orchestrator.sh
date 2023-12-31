@@ -46,13 +46,27 @@ update_container() {
         echo "Veuillez spécifier le nom du conteneur à mettre à jour."
         return
     fi
-
-    if [ -L "$DOCKER_ENABLED_DIR/$container_name" ]; then
-        cd "$DOCKER_ENABLED_DIR/$container_name" && docker compose pull
-        recreate_container "$container_name"
-        echo "Le conteneur $container_name a été mis à jour avec succès."
+    if [ "$1" == "all" ]; then
+	cd "$DOCKER_ENABLED_DIR"
+	for folder in */; do
+	    folder=${folder%/}
+	    update_container "$folder" || continue
+	    done
     else
-        echo "Le conteneur $container_name n'est pas actif."
+	if [ -L "$DOCKER_ENABLED_DIR/$container_name" ]; then
+	    update_output_file=$(mktemp)
+	    cd "$DOCKER_ENABLED_DIR/$container_name" && script -q "$update_output_file" -c "docker compose pull" # Keep the docker compose stylised output
+	    update_wc=$(cat "$update_output_file" | wc -l)
+	    if [ "$update_wc" -gt 23 ]; then
+	        recreate_container "$container_name"
+	        echo "Le conteneur $container_name a été mis à jour avec succès."
+	    else
+		echo "Le conteneur $container_name est à jour."
+	    fi
+	    rm "$update_output_file"
+	else
+	    echo "Le conteneur $container_name n'est pas actif."
+	fi
     fi
 }
 
