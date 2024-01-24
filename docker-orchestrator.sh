@@ -16,7 +16,7 @@ enable_container() {
     fi
 
     if [ -d "$DOCKER_AVAILABLE_DIR/$container_name" ]; then
-        ln -s "$DOCKER_AVAILABLE_DIR/$container_name" "$DOCKER_ENABLED_DIR/$container_name"
+        ln -s "$DOCKER_AVAILABLE_DIR/$container_name" "$DOCKER_ENABLED_DIR/"
         start_container "$container_name"
         echo "Le conteneur $container_name a été activé."
     else
