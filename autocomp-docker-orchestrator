@@ -44,3 +44,4 @@ _docker_orchestrator() {
 }
 
 complete -F _docker_orchestrator docker-orchestrator
+complete -F _docker_orchestrator orch

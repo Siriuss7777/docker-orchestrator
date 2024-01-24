@@ -5,7 +5,7 @@ Simple bash orcherstrator for docker-compose containers.
 ## Setup
 
 ~~~
-ln -s /opt/orchestrator/docker-orchestrator.sh /bin/docker-orchestrator
+ln -s /opt/orchestrator/docker-orchestrator.sh /bin/orch
 ln -s /opt/orchestrator/autocomp-docker-orchestrator /etc/bash_completion.d/docker-orchestrator
 source ~/.bashrc
 ~~~
